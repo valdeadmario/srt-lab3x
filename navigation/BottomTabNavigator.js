@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 
 import TabBarIcon from "../components/TabBarIcon";
-import { Perceptron } from "../screens/HomeScreen";
+import { Perceptron } from "../screens/Perceptron";
 import LinksScreen from "../screens/LinksScreen";
 import { Ferma } from "../screens/Ferma";
 
