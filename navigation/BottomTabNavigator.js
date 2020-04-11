@@ -31,7 +31,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Frema"
         component={Perceptron}
         options={{
-          title: "Get Started",
+          title: "Perceptron",
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-code-working" />
           ),
@@ -41,9 +41,9 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Links"
         component={LinksScreen}
         options={{
-          title: "Resources",
+          title: "Coming soon",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-book" />
+            <TabBarIcon focused={focused} name="md-code-working" />
           ),
         }}
       />
@@ -58,7 +58,7 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case "Home":
       return "3.1 Ferma";
-    case "Links":
-      return "Links to learn more";
+    case "Frema":
+      return "3.2 Perceptron";
   }
 }

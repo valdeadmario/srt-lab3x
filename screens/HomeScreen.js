@@ -117,9 +117,9 @@ export const Perceptron = () => {
         <View style={styles.card}>
           <Subheader text="Results:" />
           <View>
-            <Text>{result[0]}</Text>
-            <Text>{`Amount of iterations : ${result[1]}`}</Text>
-            <Text>{`Time spent : ${result[2]}`}</Text>
+            {result[0] && <Text>{result[0]}</Text>}
+            <Text>{`Amount of iterations : ${result[1] || "-"}`}</Text>
+            <Text>{`Time spent : ${result[2] || "-"}`}</Text>
             {result[0] == "Success" ? (
               <Text>{`W1 - ${result[3].toFixed(4)}; W2 - ${result[4].toFixed(
                 4
