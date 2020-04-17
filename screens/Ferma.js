@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 
 import { View, Text, Button } from "react-native";
 
@@ -7,7 +7,7 @@ import { TextField } from "react-native-material-textfield";
 
 import { styles } from "../styles";
 
-const calcFactorization = (n) => {
+const calcFactorization = (n, amount) => {
   const s = Math.ceil(Math.sqrt(n));
 
   if (s * s == n) {
@@ -24,21 +24,35 @@ const calcFactorization = (n) => {
     l = x * x - n;
     k++;
     if (x >= n) {
-      return [n, 1, k, n];
+      let err = false;
+      if (amount !== 0 && k > amount) {
+        const err = true;
+        return [a, b, k, n, err];
+      } else {
+        return [n, 1, k, n, err];
+      }
     }
     if (Number.isInteger(Math.sqrt(l))) {
       let y = Math.sqrt(l);
       a = x + y;
       b = n / a;
-      return [a, b, k, n];
+      let err = false;
+      if (amount !== 0 && k > amount) {
+        err = true;
+        return [a, b, k, n, err];
+      } else {
+        return [a, b, k, n, err];
+      }
     }
   }
 };
 
 export const Ferma = () => {
   const [n, setN] = useState(-1);
+  const [amount, setAmount] = useState(0);
   const [err, setErr] = useState("");
   const [result, setResult] = useState({});
+  const [errAmount, setErrAmount] = useState("");
 
   const inputN = (n) => {
     if (n === "") {
@@ -68,7 +82,12 @@ export const Ferma = () => {
   };
 
   const fermaFactor = (n) => {
-    const result = calcFactorization(n);
+    const result = calcFactorization(n, amount);
+    if (result && result[4]) {
+      setErrAmount("error");
+    } else {
+      setErrAmount("");
+    }
     setResult({
       a: result[0],
       b: result[1],
@@ -89,7 +108,13 @@ export const Ferma = () => {
             onChangeText={(text) => inputN(text)}
             keyboardType={"number-pad"}
           />
-          {console.log(n < 1 || isNaN(+n) || n % 2 == 0)}
+
+          <TextField
+            label="Amount of steps"
+            error={err}
+            onChangeText={(text) => setAmount(text)}
+            keyboardType={"number-pad"}
+          />
           <Button
             title="Calculate"
             onPress={() => fermaFactor(n)}
@@ -101,10 +126,18 @@ export const Ferma = () => {
         <View style={styles.card}>
           <Subheader text="Results:" />
           <View style={styles.output}>
-            <Text>{`n : ${n === -1 ? "-" : n}`}</Text>
-            <Text>{`A : ${result.a || "-"}`}</Text>
-            <Text>{`B : ${result.b || "-"}`}</Text>
-            <Text>{`Amount of steps : ${result.steps || "-"}`}</Text>
+            {errAmount ? (
+              <Text
+                style={{ color: "red" }}
+              >{`Error : Your amount of steps > operation steps`}</Text>
+            ) : (
+              <Fragment>
+                <Text>{`n : ${n === -1 ? "-" : n}`}</Text>
+                <Text>{`A : ${result.a || "-"}`}</Text>
+                <Text>{`B : ${result.b || "-"}`}</Text>
+                <Text>{`Amount of steps : ${result.steps || "-"}`}</Text>
+              </Fragment>
+            )}
           </View>
         </View>
       </Card>
