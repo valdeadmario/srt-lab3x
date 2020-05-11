@@ -1,74 +1,69 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 
-export default function LinksScreen() {
+import { Card, Subheader } from "react-native-material-ui";
+import { TextField } from "react-native-material-textfield";
+import { calcGenetic } from "./geneticAlg";
+import { numberize } from "./helper.js";
+
+import { styles } from "../styles";
+
+export default function App() {
+  const [coeffs, setCoeffs] = useState({
+    a: "",
+    b: "",
+    c: "",
+    d: "",
+    y: "",
+  });
+
+  const inputCall = (value, type) => setCoeffs({ ...coeffs, [type]: value });
+
+  const onChange = (value, type) => inputCall(value, type);
+
+  const clickHandler = () => {
+    alert(`${calcGenetic(numberize(coeffs)).filter((item) => item)}`);
+  };
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <OptionButton
-        icon="md-school"
-        label="Read the Expo documentation"
-        onPress={() => WebBrowser.openBrowserAsync('https://docs.expo.io')}
-      />
+    <View style={styles.container}>
+      <Card>
+        <View style={styles.card}>
+          <Subheader text="Genetic" />
 
-      <OptionButton
-        icon="md-compass"
-        label="Read the React Navigation documentation"
-        onPress={() => WebBrowser.openBrowserAsync('https://reactnavigation.org')}
-      />
-
-      <OptionButton
-        icon="ios-chatboxes"
-        label="Ask a question on the forums"
-        onPress={() => WebBrowser.openBrowserAsync('https://forums.expo.io')}
-        isLastOption
-      />
-    </ScrollView>
+          <TextField
+            label="Input a"
+            onChangeText={(text) => onChange(text, "a")}
+            keyboardType={"number-pad"}
+            value={coeffs.a}
+          />
+          <TextField
+            label="Input b"
+            onChangeText={(text) => onChange(text, "b")}
+            keyboardType={"number-pad"}
+            value={coeffs.b}
+          />
+          <TextField
+            label="Input c"
+            onChangeText={(text) => onChange(text, "c")}
+            keyboardType={"number-pad"}
+            value={coeffs.c}
+          />
+          <TextField
+            label="Input d"
+            onChangeText={(text) => onChange(text, "d")}
+            keyboardType={"number-pad"}
+            value={coeffs.d}
+          />
+          <TextField
+            label="Input y"
+            onChangeText={(text) => onChange(text, "y")}
+            keyboardType={"number-pad"}
+            value={coeffs.y}
+          />
+          <Button title="Calculate" onPress={clickHandler} />
+        </View>
+      </Card>
+    </View>
   );
 }
-
-function OptionButton({ icon, label, onPress, isLastOption }) {
-  return (
-    <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.optionIconContainer}>
-          <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
-        </View>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
-        </View>
-      </View>
-    </RectButton>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fafafa',
-  },
-  contentContainer: {
-    paddingTop: 15,
-  },
-  optionIconContainer: {
-    marginRight: 12,
-  },
-  option: {
-    backgroundColor: '#fdfdfd',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: '#ededed',
-  },
-  lastOption: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  optionText: {
-    fontSize: 15,
-    alignSelf: 'flex-start',
-    marginTop: 1,
-  },
-});
